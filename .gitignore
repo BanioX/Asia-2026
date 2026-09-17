@@ -1,0 +1,14 @@
+node_modules/
+functions/shared/
+
+# Never commit secrets or local env files
+.env
+.env.*
+*.local
+.secret*
+*.pem
+*.key
+service-account*.json
+
+firebase-debug.log*
+.firebase/

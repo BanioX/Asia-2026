@@ -1,0 +1,11 @@
+{
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "runtime": "nodejs22",
+      "ignore": ["node_modules", "test", ".git", "*.local", ".env*", "firebase-debug.log*"],
+      "predeploy": ["node functions/scripts/copy-shared.js", "npm --prefix functions test"]
+    }
+  ]
+}

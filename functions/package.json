@@ -1,0 +1,19 @@
+{
+  "name": "asia2026-functions",
+  "private": true,
+  "type": "module",
+  "main": "index.js",
+  "engines": {
+    "node": "22"
+  },
+  "scripts": {
+    "copy-shared": "node scripts/copy-shared.js",
+    "pretest": "node scripts/copy-shared.js",
+    "test": "node --test"
+  },
+  "dependencies": {
+    "@google/genai": "^2.23.0",
+    "firebase-admin": "^14.4.0",
+    "firebase-functions": "^7.4.0"
+  }
+}
