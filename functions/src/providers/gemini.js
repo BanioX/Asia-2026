@@ -16,13 +16,19 @@ export function createGeminiProvider({ apiKey, model, client }) {
     model,
     supportedCountries: SUPPORTED_COUNTRIES,
 
-    async generate({ system, messages, maxOutputTokens, timeoutMs }) {
+    async generate({ system, messages, image, maxOutputTokens, timeoutMs }) {
       if (!ai) throw new ProviderError('misconfigured', 'GEMINI_API_KEY is not set');
 
       const input = messages.map((m) => ({
         type: m.role === 'user' ? 'user_input' : 'model_output',
         content: [{ type: 'text', text: m.text }],
       }));
+
+      // An inline photo belongs to the newest question.
+      // Part format per https://ai.google.dev/gemini-api/docs/image-understanding (checked 2026-09-17).
+      if (image && input.length) {
+        input[input.length - 1].content.push({ type: 'image', data: image.data, mime_type: image.mimeType });
+      }
 
       let res;
       try {

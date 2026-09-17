@@ -209,7 +209,8 @@ describe('/ai request checks', () => {
   test('oversized body -> 413', async () => {
     const s = setup();
     const { token } = (await s.login()).body;
-    const res = await s.ask(token, { messages: [{ role: 'user', text: 'hi' }], pad: 'x'.repeat(40000) });
+    // The limit rose to 3 MB so a question can carry an inline photo.
+    const res = await s.ask(token, { messages: [{ role: 'user', text: 'hi' }], pad: 'x'.repeat(config.limits.maxBodyBytes + 1000) });
     assert.equal(res.statusCode, 413);
   });
 
@@ -223,6 +224,51 @@ describe('/ai request checks', () => {
     // the other traveller is not affected
     const other = (await s.login('alban')).body.token;
     assert.equal((await s.ask(other)).statusCode, 200);
+  });
+});
+
+describe('photo attachment', () => {
+  const PHOTO = { mimeType: 'image/jpeg', data: 'AAECAwQFBgcICQoL' };
+  const withPhoto = (image) => ({ messages: [{ role: 'user', text: 'Was ist das?' }], image });
+
+  test('a valid photo reaches the provider', async () => {
+    const s = setup();
+    const { token } = (await s.login()).body;
+    const res = await s.ask(token, withPhoto(PHOTO));
+    assert.equal(res.statusCode, 200);
+    assert.deepEqual(s.provider.calls[0].image, PHOTO);
+  });
+
+  test('no photo means no image field', async () => {
+    const s = setup();
+    const { token } = (await s.login()).body;
+    await s.ask(token);
+    assert.equal(s.provider.calls[0].image, undefined);
+  });
+
+  test('unsupported type and broken data are rejected', async () => {
+    const s = setup();
+    const { token } = (await s.login()).body;
+    for (const bad of [
+      { mimeType: 'image/heic', data: 'AAEC' },
+      { mimeType: 'application/pdf', data: 'AAEC' },
+      { mimeType: 'image/jpeg', data: 'nicht base64!!' },
+      { mimeType: 'image/jpeg', data: 42 },
+      'kein objekt',
+    ]) {
+      const res = await s.ask(token, withPhoto(bad));
+      assert.equal(res.statusCode, 400, JSON.stringify(bad));
+    }
+    assert.equal(s.provider.calls.length, 0, 'provider is never called for a bad photo');
+  });
+
+  test('an oversized photo is rejected with 413', async () => {
+    const s = setup();
+    const { token } = (await s.login()).body;
+    const res = await s.ask(token, withPhoto({ mimeType: 'image/jpeg', data: 'A'.repeat(config.limits.maxImageBase64Chars + 4) }));
+    assert.equal(res.statusCode, 413);
+    assert.equal(res.body.error.code, 'image_too_large');
+    assert.equal(s.provider.calls.length, 0);
   });
 });
 

@@ -16,6 +16,34 @@ const QUICK_ACTIONS = [
   { action: 'translate', label: '🈯 Übersetzen', prefill: 'Übersetze: ' },
 ];
 
+// ---------- photo attachment ----------
+// One photo may ride along with a question. It is downscaled in the browser first:
+// phone pictures are several MB, the backend accepts ~1 MB of base64.
+let pendingImage = null;
+const retryImages = new Map(); // messageId -> image, so a failed send can be retried with its photo
+
+function compressImage(file, maxSide = 1152, quality = 0.72) {
+  return new Promise((resolve, reject) => {
+    const url = URL.createObjectURL(file);
+    const img = new Image();
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const scale = Math.min(1, maxSide / Math.max(img.width, img.height));
+      const w = Math.max(1, Math.round(img.width * scale));
+      const hgt = Math.max(1, Math.round(img.height * scale));
+      const canvas = Object.assign(document.createElement('canvas'), { width: w, height: hgt });
+      canvas.getContext('2d').drawImage(img, 0, 0, w, hgt);
+      const full = canvas.toDataURL('image/jpeg', quality);
+      const ts = Math.min(1, 320 / Math.max(w, hgt));
+      const small = Object.assign(document.createElement('canvas'), { width: Math.max(1, Math.round(w * ts)), height: Math.max(1, Math.round(hgt * ts)) });
+      small.getContext('2d').drawImage(canvas, 0, 0, small.width, small.height);
+      resolve({ mimeType: 'image/jpeg', data: full.split(',')[1], thumb: small.toDataURL('image/jpeg', 0.6) });
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('unreadable image')); };
+    img.src = url;
+  });
+}
+
 // ---------- session (signed token issued by the backend) ----------
 let memorySession = null;
 
@@ -213,7 +241,23 @@ export function initAi(trip) {
     const status = h('div', { class: 'ai-status' });
     const input = h('textarea', { id: 'aiInput', rows: '1', maxlength: '1000', placeholder: 'Frag den Concierge …', 'aria-label': 'Deine Frage' });
     const send = h('button', { type: 'submit', class: 'ai-send', 'aria-label': 'Senden' }, '➤');
-    const form = h('form', { class: 'ai-input' }, input, send);
+    const fileInput = h('input', { type: 'file', accept: 'image/*', hidden: true, 'aria-hidden': 'true' });
+    const clip = h('button', { type: 'button', class: 'ai-clip', 'aria-label': 'Foto anhängen' }, '📎');
+    const attach = h('div', { class: 'ai-attach', hidden: true });
+    clip.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', async () => {
+      const file = fileInput.files?.[0];
+      fileInput.value = '';
+      if (!file) return;
+      try {
+        pendingImage = await compressImage(file);
+      } catch {
+        if (els) els.status.textContent = 'Das Foto konnte nicht gelesen werden.';
+        return;
+      }
+      showAttachment();
+    });
+    const form = h('form', { class: 'ai-input' }, clip, fileInput, input, send);
     const quick = h('div', { class: 'ai-quick' }, QUICK_ACTIONS.map((q) => h('button', {
       type: 'button', class: 'chip',
       onclick: () => {
@@ -251,10 +295,10 @@ export function initAi(trip) {
       input.style.height = `${Math.min(input.scrollHeight, 140)}px`;
     });
 
-    els = { list, status, input, send };
+    els = { list, status, input, send, attach };
     clear(body).append(
       h('div', { class: 'ai-bar' }, h('span', {}, `Hallo ${who} ✨`), h('span', { class: 'ai-bar-actions' }, clearBtn, logout)),
-      list, status, quick, form);
+      list, status, quick, attach, form);
     await drawMessages();
   }
 
@@ -269,10 +313,21 @@ export function initAi(trip) {
     }
     for (const m of msgs) {
       els.list.append(h('div', { class: `ai-msg ${m.role}${m.status === 'failed' ? ' failed' : ''}` },
+        m.thumb ? h('img', { class: 'ai-img', src: m.thumb, alt: 'Angehängtes Foto' }) : null,
         m.role === 'model' ? richText(m.text) : h('div', {}, m.text),
         m.status === 'failed' ? h('small', {}, 'nicht gesendet') : null));
     }
     els.list.scrollTop = els.list.scrollHeight;
+  }
+
+  function showAttachment() {
+    if (!els?.attach) return;
+    const box = clear(els.attach);
+    box.hidden = !pendingImage;
+    if (!pendingImage) return;
+    const remove = h('button', { type: 'button', 'aria-label': 'Foto entfernen' }, '✕');
+    remove.addEventListener('click', () => { pendingImage = null; showAttachment(); });
+    box.append(h('img', { src: pendingImage.thumb, alt: '' }), h('span', { class: 'muted' }, 'Foto angehängt'), remove);
   }
 
   function setBusy(on) {
@@ -284,12 +339,17 @@ export function initAi(trip) {
   }
 
   async function ask(rawText, action) {
-    const text = String(rawText || '').trim();
+    const image = pendingImage;
+    // A photo on its own is a valid question – give it a default one.
+    const text = String(rawText || '').trim() || (image ? 'Was ist auf diesem Foto? Erkläre es kurz – im Zusammenhang mit unserer Reise.' : '');
     if (busy || !text || !els) return;
     if (text.length > 1000) { els.status.textContent = 'Die Frage ist zu lang (max. 1000 Zeichen).'; return; }
     els.input.value = '';
     els.input.style.height = 'auto';
-    const id = await store.add({ role: 'user', text, ts: Date.now(), status: 'pending' });
+    pendingImage = null;
+    showAttachment();
+    const id = await store.add({ role: 'user', text, ts: Date.now(), status: 'pending', thumb: image?.thumb || null });
+    if (image) retryImages.set(id, image);
     await drawMessages();
     await submit(id, action);
   }
@@ -311,11 +371,15 @@ export function initAi(trip) {
     while (history.length && history[0].role !== 'user') history.shift();
 
     setBusy(true);
-    const r = await post('/ai', { messages: [...history, { role: 'user', text: msg.text }], action }, { token: session.token, timeoutMs: AI_CLIENT_TIMEOUT_MS });
+    const image = retryImages.get(messageId);
+    const payload = { messages: [...history, { role: 'user', text: msg.text }], action };
+    if (image) payload.image = { mimeType: image.mimeType, data: image.data };
+    const r = await post('/ai', payload, { token: session.token, timeoutMs: AI_CLIENT_TIMEOUT_MS });
     setBusy(false);
 
     if (r.status === 200 && typeof r.data?.reply === 'string') {
       if (r.data.token) saveSession({ ...session, token: r.data.token, expiresAt: r.data.expiresAt });
+      retryImages.delete(messageId);
       await store.put({ ...msg, status: 'ok' });
       await store.add({ role: 'model', text: r.data.reply, ts: Date.now() });
       await drawMessages();

@@ -80,7 +80,7 @@ export function createHandler({ config, getSecrets, providers, limiter, loadTrip
 
     // 2. payload + prompt length
     const v = validateAiRequest(req.body, config.limits);
-    if (!v.ok) throw new HttpError(v.code === 'prompt_too_long' ? 413 : 400, v.code, v.message);
+    if (!v.ok) throw new HttpError(v.code === 'prompt_too_long' || v.code === 'image_too_large' ? 413 : 400, v.code, v.message);
 
     // 3. region (official availability of the provider where the itinerary says we are)
     const t = now();
@@ -109,6 +109,7 @@ export function createHandler({ config, getSecrets, providers, limiter, loadTrip
       result = await runWithFallback(eligible, {
         system: buildSystemPrompt(trip, t, session.u, v.value.action),
         messages: v.value.messages,
+        image: v.value.image,
         maxOutputTokens: config.limits.maxOutputTokens,
         timeoutMs: config.limits.providerTimeoutMs,
       });
@@ -116,7 +117,7 @@ export function createHandler({ config, getSecrets, providers, limiter, loadTrip
       throw providerHttpError(err, log);
     }
     // Log metadata only – never the chat content.
-    log.info('ai ok', { user: session.u, action: v.value.action, provider: result.provider, ms: Date.now() - started, usage: result.usage });
+    log.info('ai ok', { user: session.u, action: v.value.action, withImage: Boolean(v.value.image), provider: result.provider, ms: Date.now() - started, usage: result.usage });
 
     const body = { reply: result.text };
     const nowSec = Math.floor(t / 1000);

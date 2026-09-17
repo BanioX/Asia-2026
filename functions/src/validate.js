@@ -47,5 +47,17 @@ export function validateAiRequest(body, limits) {
   }
   if (total > limits.maxTotalChars) return fail('prompt_too_long', 'Der Chatverlauf ist zu lang.');
 
-  return { ok: true, value: { messages: clean, action } };
+  const value = { messages: clean, action };
+
+  // Optional: one inline photo, always belonging to the newest question.
+  if (body.image !== undefined && body.image !== null) {
+    const img = body.image;
+    if (!isPlainObject(img)) return fail('invalid_request', 'Ungültiges Bildformat.');
+    if (!limits.imageMimeTypes.includes(img.mimeType)) return fail('invalid_request', 'Dieses Bildformat wird nicht unterstützt (JPEG, PNG oder WebP).');
+    if (typeof img.data !== 'string' || !/^[A-Za-z0-9+/]+={0,2}$/.test(img.data)) return fail('invalid_request', 'Ungültige Bilddaten.');
+    if (img.data.length > limits.maxImageBase64Chars) return fail('image_too_large', 'Das Foto ist zu gross – bitte ein kleineres senden.');
+    value.image = { mimeType: img.mimeType, data: img.data };
+  }
+
+  return { ok: true, value };
 }

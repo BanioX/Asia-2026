@@ -27,11 +27,13 @@ export const config = {
   },
 
   limits: {
-    maxBodyBytes: 32 * 1024,
+    maxBodyBytes: 3 * 1024 * 1024, // a question may carry one inline (base64) photo
     maxPromptChars: 1000, // the new question
     maxHistoryMessages: 10, // previous turns sent along (client trims to this as well)
     maxHistoryMessageChars: 4000,
     maxTotalChars: 20000,
+    maxImageBase64Chars: 1_400_000, // ~1 MB JPEG; the app downscales before sending
+    imageMimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
     maxOutputTokens: 1024,
     providerTimeoutMs: 12000,
   },
