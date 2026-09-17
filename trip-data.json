@@ -1028,5 +1028,131 @@
         "perBase": 189.3
       }
     ]
+  },
+  "countryFacts": {
+    "IT": {
+      "name": "Italien",
+      "flag": "🇮🇹",
+      "items": [
+        {
+          "label": "Steckdose",
+          "value": "Typ L und F, 230 V. Schweizer Stecker passt oft nicht – Adapter Typ L mitnehmen."
+        },
+        {
+          "label": "Bezahlen",
+          "value": "Karte fast überall. Kleine Bars manchmal nur bar."
+        },
+        {
+          "label": "Trinkgeld",
+          "value": "Nicht üblich, aufrunden reicht. Oft steht \"coperto\" (Gedeck) auf der Rechnung."
+        },
+        {
+          "label": "Leitungswasser",
+          "value": "Trinkbar. In Rom überall die \"nasoni\"-Brunnen zum Nachfüllen."
+        },
+        {
+          "label": "Nahverkehr",
+          "value": "Metro und Bus mit Kontaktlos-Karte direkt am Drehkreuz."
+        },
+        {
+          "label": "Netz",
+          "value": "EU-Roaming ist in Schweizer Abos oft nicht inklusive – vorher Paket prüfen."
+        }
+      ],
+      "note": "Kirchen: Schultern und Knie bedeckt, sonst kein Einlass – gilt auch im Petersdom."
+    },
+    "CN": {
+      "name": "China",
+      "flag": "🇨🇳",
+      "items": [
+        {
+          "label": "Steckdose",
+          "value": "Typ A und I, 220 V. Adapter Typ I nötig, Schweizer Stecker passt nicht."
+        },
+        {
+          "label": "Bezahlen",
+          "value": "Alipay oder WeChat Pay mit hinterlegter Kreditkarte – vor dem Abflug einrichten. Bargeld wird vielerorts kaum noch angenommen."
+        },
+        {
+          "label": "Trinkgeld",
+          "value": "Nicht üblich, teils unerwünscht."
+        },
+        {
+          "label": "Leitungswasser",
+          "value": "Nicht trinken. Abgekochtes Wasser steht in Hotels bereit."
+        },
+        {
+          "label": "Ausweis",
+          "value": "Pass immer dabei: Hotel, Zugtickets, Sehenswürdigkeiten und U-Bahn-Kontrollen verlangen ihn."
+        },
+        {
+          "label": "Internet",
+          "value": "Google, WhatsApp, Instagram und der AI Concierge sind nicht erreichbar. WeChat funktioniert."
+        }
+      ],
+      "note": "Die App läuft hier offline weiter. Tagebuch und Fotos werden gespeichert und in Hongkong automatisch hochgeladen."
+    },
+    "HK": {
+      "name": "Hongkong",
+      "flag": "🇭🇰",
+      "items": [
+        {
+          "label": "Steckdose",
+          "value": "Typ G (britisch, drei flache Stifte), 220 V. Eigener Adapter nötig."
+        },
+        {
+          "label": "Bezahlen",
+          "value": "Octopus-Karte für Bahn, Bus, Fähre und viele Läden. Karten sonst weit akzeptiert."
+        },
+        {
+          "label": "Trinkgeld",
+          "value": "Im Restaurant meist 10 % Service auf der Rechnung, sonst aufrunden."
+        },
+        {
+          "label": "Leitungswasser",
+          "value": "Offiziell trinkbar, die meisten trinken trotzdem Flaschenwasser."
+        },
+        {
+          "label": "Internet",
+          "value": "Google, WhatsApp und der AI Concierge funktionieren wieder."
+        },
+        {
+          "label": "Unterwegs",
+          "value": "Star Ferry und Peak Tram sind selbst Sehenswürdigkeiten, nicht nur Transport."
+        }
+      ],
+      "note": "Linksverkehr – beim Strassenüberqueren zuerst nach rechts schauen."
+    },
+    "JP": {
+      "name": "Japan",
+      "flag": "🇯🇵",
+      "items": [
+        {
+          "label": "Steckdose",
+          "value": "Typ A, nur 100 V. Handy und Laptop laden problemlos, Föhn oder Rasierer eventuell nicht."
+        },
+        {
+          "label": "Bezahlen",
+          "value": "Suica oder ICOCA aufs Handy laden – gilt für Bahn, Bus und Kiosk. Bargeld öfter nötig als erwartet."
+        },
+        {
+          "label": "Bargeld",
+          "value": "Automaten in 7-Eleven und in der Post nehmen ausländische Karten zuverlässig."
+        },
+        {
+          "label": "Trinkgeld",
+          "value": "Kein Trinkgeld, es gilt als unhöflich."
+        },
+        {
+          "label": "Leitungswasser",
+          "value": "Überall trinkbar und gut."
+        },
+        {
+          "label": "Benehmen",
+          "value": "Im Zug nicht telefonieren, nicht im Gehen essen, Schuhe aus wo Tatami liegt."
+        }
+      ],
+      "note": "Viele Tempel schliessen um 16:30 – früh losgehen lohnt sich."
+    }
   }
 }

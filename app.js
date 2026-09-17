@@ -75,12 +75,29 @@ function favButton(id, favs, onChange) {
  * Landmark photos for a stop. Files that are not there yet drop out of the strip,
  * so the folders can be filled over time without the app looking broken.
  */
+/**
+ * Opens whatever maps app is installed. Google Maps does not work in mainland China,
+ * Apple Maps does, so both are offered instead of guessing.
+ */
+function mapLinks(query, label = 'Karte öffnen:') {
+  if (!query) return null;
+  const q = encodeURIComponent(query);
+  return h('div', { class: 'maps' },
+    h('span', { class: 'muted' }, label),
+    h('a', { class: 'map-btn', href: `https://www.google.com/maps/search/?api=1&query=${q}`, target: '_blank', rel: 'noopener' }, '🗺️ Google'),
+    h('a', { class: 'map-btn', href: `https://maps.apple.com/?q=${q}`, target: '_blank', rel: 'noopener' }, '🍎 Apple'));
+}
+
 function renderGallery(stop) {
   if (!stop.gallery?.length) return null;
   const strip = h('div', { class: 'shots' });
   for (const g of stop.gallery) {
     const img = h('img', { src: g.file, alt: g.title, loading: 'lazy', decoding: 'async' });
-    const shot = h('figure', { class: 'shot' }, img, h('figcaption', {}, g.title));
+    const link = h('a', {
+      href: `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(g.title + ' ' + stop.name)}`,
+      target: '_blank', rel: 'noopener', title: g.title + ' auf der Karte',
+    }, img);
+    const shot = h('figure', { class: 'shot' }, link, h('figcaption', {}, g.title));
     img.addEventListener('error', () => shot.remove());
     strip.append(shot);
   }
@@ -97,6 +114,7 @@ function renderCities(trip, favs) {
         h('div', { class: 'sub' }, s.subtitle),
         s.intro ? h('p', {}, inline(s.intro)) : null,
         renderGallery(s),
+        mapLinks(s.name),
         h('div', { class: 'grid' }, (s.highlights || []).map((hl, i) =>
           h('div', { class: 'mini' },
             favButton(`${s.id}:${i}`, favs, () => renderFavorites(trip, favs)),
@@ -141,12 +159,58 @@ function renderStays(trip) {
       field('Adresse (für Taxi zeigen)', hotel.addressLocal, { big: true }),
       field('Telefon', hotel.phone, { tel: true }),
       field('Hotel-Notizen', hotel.notes),
+      hotel.address ? mapLinks(hotel.address + ', ' + s.name, 'Hotel auf der Karte:') : null,
       field('Transport', s.transport),
       field('Buchungsnotizen', s.bookingNotes),
     ].filter(Boolean);
     root.append(h('details', { class: 'info', open: currentIds.has(s.id) },
       h('summary', {}, `${s.routeIcon} ${s.name}`, h('small', {}, ` · ${formatRange(s.from, s.to)}`)),
       rows.length ? rows : h('p', { class: 'muted' }, 'Noch nichts eingetragen.')));
+  }
+}
+
+/** Local time wherever the itinerary goes, plus home - handy for calling Switzerland. */
+function renderClocks(trip) {
+  const root = clear($('clocks'));
+  root.append(h('h3', { class: 'group-title' }, '🕐 Uhrzeiten'));
+  const zones = [{ name: trip.home, tz: 'Europe/Zurich' }, ...visibleStops(trip).map((s) => ({ name: s.name, tz: s.tz }))];
+  const grid = h('div', { class: 'grid' });
+  const cells = [];
+  const seen = new Set();
+  for (const z of zones) {
+    if (!z.tz || seen.has(z.tz)) continue;
+    seen.add(z.tz);
+    const value = h('strong', {});
+    cells.push({ tz: z.tz, el: value });
+    grid.append(h('div', { class: 'mini' }, value, h('span', {}, z.name)));
+  }
+  const tick = () => {
+    const now = appNow();
+    for (const c of cells) {
+      try {
+        c.el.textContent = new Intl.DateTimeFormat('de-CH', { timeZone: c.tz, weekday: 'short', hour: '2-digit', minute: '2-digit' }).format(now);
+      } catch {
+        c.el.textContent = '–';
+      }
+    }
+  };
+  tick();
+  setInterval(tick, 30000);
+  root.append(grid);
+}
+
+/** Plugs, paying, tipping, tap water - the things you look up once per country. */
+function renderFacts(trip) {
+  const root = clear($('facts'));
+  if (!trip.countryFacts) return;
+  root.append(h('h3', { class: 'group-title' }, '🧾 Länder-Spickzettel'));
+  for (const code of [...new Set(visibleStops(trip).map((s) => s.country))]) {
+    const f = trip.countryFacts[code];
+    if (!f) continue;
+    root.append(h('details', { class: 'info' },
+      h('summary', {}, f.flag + ' ' + f.name),
+      h('div', { class: 'grid' }, f.items.map((it) => h('div', { class: 'mini' }, h('strong', {}, it.label), h('span', {}, it.value)))),
+      f.note ? h('p', { class: 'muted' }, f.note) : null));
   }
 }
 
@@ -237,6 +301,8 @@ async function main() {
   renderFavorites(trip, favs);
   renderStays(trip);
   renderCurrency(trip);
+  renderClocks(trip);
+  renderFacts(trip);
   initDiary(trip);
   renderPhrases(trip);
   renderEmergency(trip);

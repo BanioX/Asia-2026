@@ -1,4 +1,4 @@
-const CACHE='asia2026-v9';
+const CACHE='asia2026-v10';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./app.js','./ai.js','./diary.js','./dom.js','./app-config.js','./trip-core.js','./trip-data.json'];
 const NETWORK_TIMEOUT_MS=4000; // slow/blocked networks (e.g. mainland China) fall back to the offline copy quickly
 self.addEventListener('install',e=>{self.skipWaiting();e.waitUntil(caches.open(CACHE).then(c=>c.addAll(ASSETS)))});
