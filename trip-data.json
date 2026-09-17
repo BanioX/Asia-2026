@@ -67,7 +67,49 @@
         "notes": ""
       },
       "transport": "",
-      "bookingNotes": ""
+      "bookingNotes": "",
+      "gallery": [
+        {
+          "title": "Kolosseum",
+          "file": "photos/rom/kolosseum.jpg"
+        },
+        {
+          "title": "Forum Romanum",
+          "file": "photos/rom/forum-romanum.jpg"
+        },
+        {
+          "title": "Petersdom",
+          "file": "photos/rom/petersdom.jpg"
+        },
+        {
+          "title": "Vatikanische Museen",
+          "file": "photos/rom/vatikanische-museen.jpg"
+        },
+        {
+          "title": "Trevi-Brunnen",
+          "file": "photos/rom/trevi-brunnen.jpg"
+        },
+        {
+          "title": "Pantheon",
+          "file": "photos/rom/pantheon.jpg"
+        },
+        {
+          "title": "Spanische Treppe",
+          "file": "photos/rom/spanische-treppe.jpg"
+        },
+        {
+          "title": "Engelsburg",
+          "file": "photos/rom/engelsburg.jpg"
+        },
+        {
+          "title": "Piazza Navona",
+          "file": "photos/rom/piazza-navona.jpg"
+        },
+        {
+          "title": "Trastevere",
+          "file": "photos/rom/trastevere.jpg"
+        }
+      ]
     },
     {
       "id": "beijing",
@@ -129,7 +171,49 @@
         "notes": ""
       },
       "transport": "",
-      "bookingNotes": ""
+      "bookingNotes": "",
+      "gallery": [
+        {
+          "title": "Verbotene Stadt",
+          "file": "photos/beijing/verbotene-stadt.jpg"
+        },
+        {
+          "title": "Grosse Mauer (Mutianyu)",
+          "file": "photos/beijing/grosse-mauer.jpg"
+        },
+        {
+          "title": "Himmelstempel",
+          "file": "photos/beijing/himmelstempel.jpg"
+        },
+        {
+          "title": "Sommerpalast",
+          "file": "photos/beijing/sommerpalast.jpg"
+        },
+        {
+          "title": "Platz des Himmlischen Friedens",
+          "file": "photos/beijing/tiananmen.jpg"
+        },
+        {
+          "title": "Jingshan Park",
+          "file": "photos/beijing/jingshan-park.jpg"
+        },
+        {
+          "title": "Hutongs",
+          "file": "photos/beijing/hutongs.jpg"
+        },
+        {
+          "title": "Houhai-See",
+          "file": "photos/beijing/houhai.jpg"
+        },
+        {
+          "title": "Lama-Tempel",
+          "file": "photos/beijing/lama-tempel.jpg"
+        },
+        {
+          "title": "Pekingente",
+          "file": "photos/beijing/pekingente.jpg"
+        }
+      ]
     },
     {
       "id": "shanghai",
@@ -186,7 +270,49 @@
         "notes": ""
       },
       "transport": "",
-      "bookingNotes": ""
+      "bookingNotes": "",
+      "gallery": [
+        {
+          "title": "The Bund",
+          "file": "photos/shanghai/the-bund.jpg"
+        },
+        {
+          "title": "Pudong-Skyline",
+          "file": "photos/shanghai/pudong-skyline.jpg"
+        },
+        {
+          "title": "Oriental Pearl Tower",
+          "file": "photos/shanghai/oriental-pearl-tower.jpg"
+        },
+        {
+          "title": "Shanghai Tower",
+          "file": "photos/shanghai/shanghai-tower.jpg"
+        },
+        {
+          "title": "Yu-Garten",
+          "file": "photos/shanghai/yu-garten.jpg"
+        },
+        {
+          "title": "Nanjing Road",
+          "file": "photos/shanghai/nanjing-road.jpg"
+        },
+        {
+          "title": "French Concession",
+          "file": "photos/shanghai/french-concession.jpg"
+        },
+        {
+          "title": "Xintiandi",
+          "file": "photos/shanghai/xintiandi.jpg"
+        },
+        {
+          "title": "Tianzifang",
+          "file": "photos/shanghai/tianzifang.jpg"
+        },
+        {
+          "title": "Jade-Buddha-Tempel",
+          "file": "photos/shanghai/jade-buddha-tempel.jpg"
+        }
+      ]
     },
     {
       "id": "hongkong",
@@ -243,7 +369,49 @@
         "notes": ""
       },
       "transport": "",
-      "bookingNotes": ""
+      "bookingNotes": "",
+      "gallery": [
+        {
+          "title": "Victoria Peak",
+          "file": "photos/hongkong/victoria-peak.jpg"
+        },
+        {
+          "title": "Star Ferry",
+          "file": "photos/hongkong/star-ferry.jpg"
+        },
+        {
+          "title": "Tsim Sha Tsui",
+          "file": "photos/hongkong/tsim-sha-tsui.jpg"
+        },
+        {
+          "title": "Tian Tan Buddha",
+          "file": "photos/hongkong/tian-tan-buddha.jpg"
+        },
+        {
+          "title": "Po Lin Kloster",
+          "file": "photos/hongkong/po-lin-kloster.jpg"
+        },
+        {
+          "title": "Temple Street Night Market",
+          "file": "photos/hongkong/temple-street.jpg"
+        },
+        {
+          "title": "Ladies Market",
+          "file": "photos/hongkong/ladies-market.jpg"
+        },
+        {
+          "title": "Symphony of Lights",
+          "file": "photos/hongkong/symphony-of-lights.jpg"
+        },
+        {
+          "title": "Man-Mo-Tempel",
+          "file": "photos/hongkong/man-mo-tempel.jpg"
+        },
+        {
+          "title": "Repulse Bay",
+          "file": "photos/hongkong/repulse-bay.jpg"
+        }
+      ]
     },
     {
       "id": "osaka",
@@ -292,7 +460,49 @@
         "notes": ""
       },
       "transport": "",
-      "bookingNotes": ""
+      "bookingNotes": "",
+      "gallery": [
+        {
+          "title": "Burg Osaka",
+          "file": "photos/osaka/burg-osaka.jpg"
+        },
+        {
+          "title": "Dotonbori",
+          "file": "photos/osaka/dotonbori.jpg"
+        },
+        {
+          "title": "Glico Man",
+          "file": "photos/osaka/glico-man.jpg"
+        },
+        {
+          "title": "Shinsekai & Tsutenkaku",
+          "file": "photos/osaka/shinsekai.jpg"
+        },
+        {
+          "title": "Umeda Sky Building",
+          "file": "photos/osaka/umeda-sky-building.jpg"
+        },
+        {
+          "title": "Kuromon-Markt",
+          "file": "photos/osaka/kuromon-markt.jpg"
+        },
+        {
+          "title": "Shitennoji-Tempel",
+          "file": "photos/osaka/shitennoji.jpg"
+        },
+        {
+          "title": "Namba",
+          "file": "photos/osaka/namba.jpg"
+        },
+        {
+          "title": "Osaka Aquarium",
+          "file": "photos/osaka/osaka-aquarium.jpg"
+        },
+        {
+          "title": "Takoyaki",
+          "file": "photos/osaka/takoyaki.jpg"
+        }
+      ]
     },
     {
       "id": "kyoto",
@@ -341,7 +551,49 @@
         "notes": ""
       },
       "transport": "",
-      "bookingNotes": ""
+      "bookingNotes": "",
+      "gallery": [
+        {
+          "title": "Fushimi Inari",
+          "file": "photos/kyoto/fushimi-inari.jpg"
+        },
+        {
+          "title": "Kinkaku-ji",
+          "file": "photos/kyoto/kinkakuji.jpg"
+        },
+        {
+          "title": "Kiyomizu-dera",
+          "file": "photos/kyoto/kiyomizudera.jpg"
+        },
+        {
+          "title": "Arashiyama Bambuswald",
+          "file": "photos/kyoto/arashiyama-bambuswald.jpg"
+        },
+        {
+          "title": "Gion",
+          "file": "photos/kyoto/gion.jpg"
+        },
+        {
+          "title": "Philosophenweg",
+          "file": "photos/kyoto/philosophenweg.jpg"
+        },
+        {
+          "title": "Nijo-Schloss",
+          "file": "photos/kyoto/nijo-schloss.jpg"
+        },
+        {
+          "title": "Ginkaku-ji",
+          "file": "photos/kyoto/ginkakuji.jpg"
+        },
+        {
+          "title": "Togetsukyo-Brücke",
+          "file": "photos/kyoto/togetsukyo-bruecke.jpg"
+        },
+        {
+          "title": "Geisha in Gion",
+          "file": "photos/kyoto/geisha.jpg"
+        }
+      ]
     },
     {
       "id": "tokyo",
@@ -394,7 +646,49 @@
         "notes": ""
       },
       "transport": "",
-      "bookingNotes": ""
+      "bookingNotes": "",
+      "gallery": [
+        {
+          "title": "Senso-ji",
+          "file": "photos/tokyo/sensoji.jpg"
+        },
+        {
+          "title": "Kaminarimon",
+          "file": "photos/tokyo/kaminarimon.jpg"
+        },
+        {
+          "title": "Shibuya Crossing",
+          "file": "photos/tokyo/shibuya-crossing.jpg"
+        },
+        {
+          "title": "Tokyo Skytree",
+          "file": "photos/tokyo/tokyo-skytree.jpg"
+        },
+        {
+          "title": "Tokyo Tower",
+          "file": "photos/tokyo/tokyo-tower.jpg"
+        },
+        {
+          "title": "Meiji-Schrein",
+          "file": "photos/tokyo/meiji-schrein.jpg"
+        },
+        {
+          "title": "Shinjuku bei Nacht",
+          "file": "photos/tokyo/shinjuku.jpg"
+        },
+        {
+          "title": "Takeshita Street",
+          "file": "photos/tokyo/takeshita-street.jpg"
+        },
+        {
+          "title": "Tsukiji Outer Market",
+          "file": "photos/tokyo/tsukiji.jpg"
+        },
+        {
+          "title": "Akihabara",
+          "file": "photos/tokyo/akihabara.jpg"
+        }
+      ]
     },
     {
       "id": "miyakojima",
@@ -444,7 +738,49 @@
         "notes": ""
       },
       "transport": "",
-      "bookingNotes": ""
+      "bookingNotes": "",
+      "gallery": [
+        {
+          "title": "Yonaha Maehama Beach",
+          "file": "photos/miyakojima/yonaha-maehama.jpg"
+        },
+        {
+          "title": "Irabu-Brücke",
+          "file": "photos/miyakojima/irabu-bruecke.jpg"
+        },
+        {
+          "title": "Higashi-Hennazaki",
+          "file": "photos/miyakojima/higashi-hennazaki.jpg"
+        },
+        {
+          "title": "Sunayama Beach",
+          "file": "photos/miyakojima/sunayama-beach.jpg"
+        },
+        {
+          "title": "Kurima-Brücke",
+          "file": "photos/miyakojima/kurima-bruecke.jpg"
+        },
+        {
+          "title": "Imgya Marine Garden",
+          "file": "photos/miyakojima/imgya-marine-garden.jpg"
+        },
+        {
+          "title": "Yoshino Beach",
+          "file": "photos/miyakojima/yoshino-beach.jpg"
+        },
+        {
+          "title": "17END Beach",
+          "file": "photos/miyakojima/17end-beach.jpg"
+        },
+        {
+          "title": "Shigira-Bucht",
+          "file": "photos/miyakojima/shigira.jpg"
+        },
+        {
+          "title": "Sonnenuntergang",
+          "file": "photos/miyakojima/sonnenuntergang.jpg"
+        }
+      ]
     },
     {
       "id": "home",

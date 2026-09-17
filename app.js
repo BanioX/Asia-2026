@@ -71,6 +71,22 @@ function favButton(id, favs, onChange) {
   return btn;
 }
 
+/**
+ * Landmark photos for a stop. Files that are not there yet drop out of the strip,
+ * so the folders can be filled over time without the app looking broken.
+ */
+function renderGallery(stop) {
+  if (!stop.gallery?.length) return null;
+  const strip = h('div', { class: 'shots' });
+  for (const g of stop.gallery) {
+    const img = h('img', { src: g.file, alt: g.title, loading: 'lazy', decoding: 'async' });
+    const shot = h('figure', { class: 'shot' }, img, h('figcaption', {}, g.title));
+    img.addEventListener('error', () => shot.remove());
+    strip.append(shot);
+  }
+  return strip;
+}
+
 function renderCities(trip, favs) {
   const root = clear($('cities'));
   for (const s of visibleStops(trip)) {
@@ -80,6 +96,7 @@ function renderCities(trip, favs) {
         h('h2', {}, s.name),
         h('div', { class: 'sub' }, s.subtitle),
         s.intro ? h('p', {}, inline(s.intro)) : null,
+        renderGallery(s),
         h('div', { class: 'grid' }, (s.highlights || []).map((hl, i) =>
           h('div', { class: 'mini' },
             favButton(`${s.id}:${i}`, favs, () => renderFavorites(trip, favs)),
