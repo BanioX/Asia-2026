@@ -18,10 +18,11 @@ const SESSION_SIGNING_SECRET = defineSecret('SESSION_SIGNING_SECRET');
 
 initializeApp();
 
+// trim(): values entered via terminal/stdin often carry a trailing newline.
 const getSecrets = () => ({
-  GEMINI_API_KEY: GEMINI_API_KEY.value(),
-  COUPLE_ACCESS_SECRET: COUPLE_ACCESS_SECRET.value(),
-  SESSION_SIGNING_SECRET: SESSION_SIGNING_SECRET.value(),
+  GEMINI_API_KEY: GEMINI_API_KEY.value().trim(),
+  COUPLE_ACCESS_SECRET: COUPLE_ACCESS_SECRET.value().trim(),
+  SESSION_SIGNING_SECRET: SESSION_SIGNING_SECRET.value().trim(),
 });
 
 let handler;
