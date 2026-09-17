@@ -26,7 +26,7 @@ const KYOTO_DAY = at('2026-10-07T03:00:00Z'); // 12:00 in Kyoto
 const BEIJING_DAY = at('2026-09-27T04:00:00Z');
 const silentLog = { info() {}, warn() {}, error() {} };
 
-function fakeProvider(impl, supportedCountries = ['CH', 'JP']) {
+function fakeProvider(impl, supportedCountries = ['CH', 'IT', 'JP']) {
   const calls = [];
   return {
     name: 'fake',
@@ -364,11 +364,21 @@ describe('trip logic', () => {
   test('before / during / after', () => {
     const before = getTripStatus(trip, new Date(at('2026-09-17T10:00:00Z')));
     assert.equal(before.phase, 'before');
-    assert.equal(before.daysUntilStart, 8);
+    assert.equal(before.daysUntilStart, 4);
     assert.equal(getTripStatus(trip, new Date(at('2026-10-20T10:00:00Z'))).phase, 'after');
     const kyoto = getTripStatus(trip, new Date(KYOTO_DAY));
     assert.deepEqual(kyoto.current.map((s) => s.id), ['kyoto']);
     assert.equal(kyoto.next.id, 'tokyo');
+  });
+
+  test('Rome is the first stop and the AI is available there', () => {
+    const rome = getTripStatus(trip, new Date(at('2026-09-22T10:00:00Z')));
+    assert.deepEqual(rome.current.map((s) => s.id), ['rom']);
+    assert.equal(rome.next.id, 'beijing');
+    assert.equal(getAiRegionStatus(trip, new Date(at('2026-09-22T10:00:00Z')), ['CH', 'IT', 'JP']).blocked, false);
+    // Departure day is still Rome; Beijing (and the AI block) starts on 25 Sep.
+    assert.deepEqual(getTripStatus(trip, new Date(at('2026-09-24T10:00:00Z'))).current.map((s) => s.id), ['rom']);
+    assert.equal(getAiRegionStatus(trip, new Date(at('2026-09-25T10:00:00Z')), ['CH', 'IT', 'JP']).blocked, true);
   });
 
   test('travel day HK -> Osaka is blocked (fail closed), 6 Oct is open', () => {

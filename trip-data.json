@@ -2,12 +2,73 @@
   "version": 1,
   "_hinweis": "Einzige Quelle für den Reiseplan: wird in der PWA angezeigt (auch offline) und dem AI Concierge als Kontext mitgegeben. ACHTUNG: Das Repository ist öffentlich – keine Buchungsnummern, Passnummern, Codes oder Telefonnummern von Privatpersonen eintragen.",
   "title": "Asia 2026",
-  "travellers": ["Alban", "Deshira"],
-  "start": "2026-09-25",
+  "travellers": [
+    "Alban",
+    "Deshira"
+  ],
+  "start": "2026-09-21",
   "end": "2026-10-16",
   "home": "Zürich",
   "notice": "**Planungsnotiz:** 1.–7. Oktober ist Chinas National-Day/Golden-Week-Zeitraum. Züge, Flüge und Top-Sehenswürdigkeiten früh reservieren. Die genauen Flugzeiten sind noch nicht gebucht und bleiben deshalb bewusst flexibel.",
   "stops": [
+    {
+      "id": "rom",
+      "name": "Rom",
+      "country": "IT",
+      "tz": "Europe/Rome",
+      "from": "2026-09-21",
+      "to": "2026-09-24",
+      "routeIcon": "🇮🇹",
+      "visual": "🏛️🍝",
+      "subtitle": "Auftakt in der Ewigen Stadt · 3 Nächte",
+      "highlights": [
+        {
+          "label": "🏆 Must See",
+          "value": "Kolosseum & Forum Romanum"
+        },
+        {
+          "label": "❤️ Unser Moment",
+          "value": "Abends durch Trastevere"
+        },
+        {
+          "label": "⛲ Klassiker",
+          "value": "Pantheon & Trevi-Brunnen"
+        },
+        {
+          "label": "🍝 Food",
+          "value": "Cacio e Pepe, Supplì, Gelato"
+        }
+      ],
+      "daysTitle": "Tagesidee",
+      "daysOpen": true,
+      "days": [
+        {
+          "from": "2026-09-21",
+          "text": "Ankunft, einchecken, Abendessen in Trastevere."
+        },
+        {
+          "from": "2026-09-22",
+          "text": "Kolosseum → Forum Romanum → Palatin. Abends Pantheon & Trevi-Brunnen."
+        },
+        {
+          "from": "2026-09-23",
+          "text": "Vatikan: Petersdom & Museen → Engelsburg → Piazza Navona."
+        },
+        {
+          "from": "2026-09-24",
+          "text": "Letzter Vormittag in Rom, dann Abflug nach Peking (Ankunft 25.09.)."
+        }
+      ],
+      "hotel": {
+        "name": "",
+        "address": "",
+        "addressLocal": "",
+        "phone": "",
+        "notes": ""
+      },
+      "transport": "",
+      "bookingNotes": ""
+    },
     {
       "id": "beijing",
       "name": "Beijing",
@@ -19,21 +80,54 @@
       "visual": "🏯🧱",
       "subtitle": "Das kaiserliche China · 4 Nächte",
       "highlights": [
-        { "label": "🏆 Must See", "value": "Verbotene Stadt" },
-        { "label": "❤️ Unser Moment", "value": "Mutianyu Great Wall" },
-        { "label": "🌅 Aussicht", "value": "Jingshan Park" },
-        { "label": "🥢 Food", "value": "Pekingente" }
+        {
+          "label": "🏆 Must See",
+          "value": "Verbotene Stadt"
+        },
+        {
+          "label": "❤️ Unser Moment",
+          "value": "Mutianyu Great Wall"
+        },
+        {
+          "label": "🌅 Aussicht",
+          "value": "Jingshan Park"
+        },
+        {
+          "label": "🥢 Food",
+          "value": "Pekingente"
+        }
       ],
       "daysTitle": "Tagesidee",
       "daysOpen": true,
       "days": [
-        { "from": "2026-09-25", "text": "Ankunft, Hotel, ruhiger Abend." },
-        { "from": "2026-09-26", "text": "Himmelstempel → Hutongs → Houhai." },
-        { "from": "2026-09-27", "text": "Mutianyu Ganztagesausflug." },
-        { "from": "2026-09-28", "text": "Verbotene Stadt → Jingshan → Wangfujing." },
-        { "from": "2026-09-29", "text": "Weiter nach Shanghai." }
+        {
+          "from": "2026-09-25",
+          "text": "Ankunft, Hotel, ruhiger Abend."
+        },
+        {
+          "from": "2026-09-26",
+          "text": "Himmelstempel → Hutongs → Houhai."
+        },
+        {
+          "from": "2026-09-27",
+          "text": "Mutianyu Ganztagesausflug."
+        },
+        {
+          "from": "2026-09-28",
+          "text": "Verbotene Stadt → Jingshan → Wangfujing."
+        },
+        {
+          "from": "2026-09-29",
+          "text": "Weiter nach Shanghai."
+        }
       ],
-      "hotel": { "name": "", "address": "", "addressLocal": "", "phone": "", "notes": "" },
+      "hotel": {
+        "name": "",
+        "address": "",
+        "addressLocal": "",
+        "phone": "",
+        "notes": ""
+      },
       "transport": "",
       "bookingNotes": ""
     },
@@ -48,19 +142,49 @@
       "visual": "🌃✨",
       "subtitle": "Alt trifft Zukunft · 3 Nächte",
       "highlights": [
-        { "label": "🏆 Must See", "value": "The Bund" },
-        { "label": "🏙️ Wow", "value": "Lujiazui & Shanghai Tower" },
-        { "label": "🏯 Kultur", "value": "Yu Garden" },
-        { "label": "❤️ Spaziergang", "value": "French Concession" }
+        {
+          "label": "🏆 Must See",
+          "value": "The Bund"
+        },
+        {
+          "label": "🏙️ Wow",
+          "value": "Lujiazui & Shanghai Tower"
+        },
+        {
+          "label": "🏯 Kultur",
+          "value": "Yu Garden"
+        },
+        {
+          "label": "❤️ Spaziergang",
+          "value": "French Concession"
+        }
       ],
       "daysTitle": "Tagesidee",
       "days": [
-        { "from": "2026-09-29", "text": "Ankunft → Bund bei Nacht." },
-        { "from": "2026-09-30", "text": "Yu Garden → Pudong → Skyline." },
-        { "from": "2026-10-01", "text": "French Concession → Xintiandi → Tianzifang." },
-        { "from": "2026-10-02", "text": "Flug nach Hongkong." }
+        {
+          "from": "2026-09-29",
+          "text": "Ankunft → Bund bei Nacht."
+        },
+        {
+          "from": "2026-09-30",
+          "text": "Yu Garden → Pudong → Skyline."
+        },
+        {
+          "from": "2026-10-01",
+          "text": "French Concession → Xintiandi → Tianzifang."
+        },
+        {
+          "from": "2026-10-02",
+          "text": "Flug nach Hongkong."
+        }
       ],
-      "hotel": { "name": "", "address": "", "addressLocal": "", "phone": "", "notes": "" },
+      "hotel": {
+        "name": "",
+        "address": "",
+        "addressLocal": "",
+        "phone": "",
+        "notes": ""
+      },
       "transport": "",
       "bookingNotes": ""
     },
@@ -75,19 +199,49 @@
       "visual": "🌆⛴️",
       "subtitle": "Skyline, Streetlife & Berge · 3 Nächte",
       "highlights": [
-        { "label": "🏆 Must See", "value": "Victoria Peak" },
-        { "label": "⛴️ Klassiker", "value": "Star Ferry" },
-        { "label": "🌃 Abend", "value": "Tsim Sha Tsui" },
-        { "label": "🥟 Food", "value": "Mong Kok" }
+        {
+          "label": "🏆 Must See",
+          "value": "Victoria Peak"
+        },
+        {
+          "label": "⛴️ Klassiker",
+          "value": "Star Ferry"
+        },
+        {
+          "label": "🌃 Abend",
+          "value": "Tsim Sha Tsui"
+        },
+        {
+          "label": "🥟 Food",
+          "value": "Mong Kok"
+        }
       ],
       "daysTitle": "Tagesidee",
       "days": [
-        { "from": "2026-10-02", "text": "Ankunft → Kowloon & Harbour." },
-        { "from": "2026-10-03", "text": "Central → Mid-Levels → Peak zum Sonnenuntergang." },
-        { "from": "2026-10-04", "text": "Lantau oder Dragon's Back." },
-        { "from": "2026-10-05", "text": "Flug nach Osaka." }
+        {
+          "from": "2026-10-02",
+          "text": "Ankunft → Kowloon & Harbour."
+        },
+        {
+          "from": "2026-10-03",
+          "text": "Central → Mid-Levels → Peak zum Sonnenuntergang."
+        },
+        {
+          "from": "2026-10-04",
+          "text": "Lantau oder Dragon's Back."
+        },
+        {
+          "from": "2026-10-05",
+          "text": "Flug nach Osaka."
+        }
       ],
-      "hotel": { "name": "", "address": "", "addressLocal": "", "phone": "", "notes": "" },
+      "hotel": {
+        "name": "",
+        "address": "",
+        "addressLocal": "",
+        "phone": "",
+        "notes": ""
+      },
       "transport": "",
       "bookingNotes": ""
     },
@@ -102,17 +256,41 @@
       "visual": "🍜🎌",
       "subtitle": "Japan beginnt mit Neon & Essen",
       "highlights": [
-        { "label": "🌃 Must See", "value": "Dotonbori bei Nacht" },
-        { "label": "🏯 Klassiker", "value": "Osaka Castle" },
-        { "label": "🍢 Probieren", "value": "Takoyaki" },
-        { "label": "🛍️ Viertel", "value": "Shinsaibashi" }
+        {
+          "label": "🌃 Must See",
+          "value": "Dotonbori bei Nacht"
+        },
+        {
+          "label": "🏯 Klassiker",
+          "value": "Osaka Castle"
+        },
+        {
+          "label": "🍢 Probieren",
+          "value": "Takoyaki"
+        },
+        {
+          "label": "🛍️ Viertel",
+          "value": "Shinsaibashi"
+        }
       ],
       "daysTitle": "Tagesidee",
       "days": [
-        { "from": "2026-10-05", "text": "Ankunft → Dotonbori & Namba." },
-        { "from": "2026-10-06", "text": "Osaka Castle → Kuromon → Shinsekai → Umeda. Danach kurzer Bahntransfer nach Kyoto." }
+        {
+          "from": "2026-10-05",
+          "text": "Ankunft → Dotonbori & Namba."
+        },
+        {
+          "from": "2026-10-06",
+          "text": "Osaka Castle → Kuromon → Shinsekai → Umeda. Danach kurzer Bahntransfer nach Kyoto."
+        }
       ],
-      "hotel": { "name": "", "address": "", "addressLocal": "", "phone": "", "notes": "" },
+      "hotel": {
+        "name": "",
+        "address": "",
+        "addressLocal": "",
+        "phone": "",
+        "notes": ""
+      },
       "transport": "",
       "bookingNotes": ""
     },
@@ -127,17 +305,41 @@
       "visual": "⛩️🍁",
       "subtitle": "Tempel, Gassen & traditionelles Japan",
       "highlights": [
-        { "label": "🏆 Must See", "value": "Fushimi Inari" },
-        { "label": "❤️ Romantik", "value": "Gion am Abend" },
-        { "label": "🏯 Highlight", "value": "Kiyomizu-dera" },
-        { "label": "🎋 Natur", "value": "Arashiyama" }
+        {
+          "label": "🏆 Must See",
+          "value": "Fushimi Inari"
+        },
+        {
+          "label": "❤️ Romantik",
+          "value": "Gion am Abend"
+        },
+        {
+          "label": "🏯 Highlight",
+          "value": "Kiyomizu-dera"
+        },
+        {
+          "label": "🎋 Natur",
+          "value": "Arashiyama"
+        }
       ],
       "daysTitle": "Tagesidee",
       "days": [
-        { "from": "2026-10-07", "text": "Fushimi Inari früh → Kiyomizu → Ninenzaka → Gion." },
-        { "from": "2026-10-08", "text": "Arashiyama → Kinkaku-ji → Shinkansen nach Tokyo." }
+        {
+          "from": "2026-10-07",
+          "text": "Fushimi Inari früh → Kiyomizu → Ninenzaka → Gion."
+        },
+        {
+          "from": "2026-10-08",
+          "text": "Arashiyama → Kinkaku-ji → Shinkansen nach Tokyo."
+        }
       ],
-      "hotel": { "name": "", "address": "", "addressLocal": "", "phone": "", "notes": "" },
+      "hotel": {
+        "name": "",
+        "address": "",
+        "addressLocal": "",
+        "phone": "",
+        "notes": ""
+      },
       "transport": "",
       "bookingNotes": ""
     },
@@ -152,18 +354,45 @@
       "visual": "🗼👾",
       "subtitle": "Die größte Kontrastmaschine der Reise · 2 Nächte",
       "highlights": [
-        { "label": "🌃 Must See", "value": "Shibuya" },
-        { "label": "👾 Alban", "value": "Akihabara" },
-        { "label": "⛩️ Tradition", "value": "Senso-ji" },
-        { "label": "❤️ Gemeinsam", "value": "Shibuya Sky" }
+        {
+          "label": "🌃 Must See",
+          "value": "Shibuya"
+        },
+        {
+          "label": "👾 Alban",
+          "value": "Akihabara"
+        },
+        {
+          "label": "⛩️ Tradition",
+          "value": "Senso-ji"
+        },
+        {
+          "label": "❤️ Gemeinsam",
+          "value": "Shibuya Sky"
+        }
       ],
       "daysTitle": "Tagesidee",
       "days": [
-        { "from": "2026-10-08", "text": "Ankunft → Shibuya → Shinjuku." },
-        { "from": "2026-10-09", "text": "Asakusa → Senso-ji → Akihabara → Abend in Tokyo." },
-        { "from": "2026-10-10", "text": "Flug Richtung Miyakojima." }
+        {
+          "from": "2026-10-08",
+          "text": "Ankunft → Shibuya → Shinjuku."
+        },
+        {
+          "from": "2026-10-09",
+          "text": "Asakusa → Senso-ji → Akihabara → Abend in Tokyo."
+        },
+        {
+          "from": "2026-10-10",
+          "text": "Flug Richtung Miyakojima."
+        }
       ],
-      "hotel": { "name": "", "address": "", "addressLocal": "", "phone": "", "notes": "" },
+      "hotel": {
+        "name": "",
+        "address": "",
+        "addressLocal": "",
+        "phone": "",
+        "notes": ""
+      },
       "transport": "",
       "bookingNotes": ""
     },
@@ -180,18 +409,40 @@
       "subtitle": "10–15 Oktober · Unser Finale ❤️",
       "intro": "Nach Kaiserpalästen, Hochgeschwindigkeitszügen, Neon und Tempeln kommt der wichtigste Termin: **keiner.**",
       "highlights": [
-        { "label": "🏖️ Strand", "value": "Yonaha Maehama" },
-        { "label": "🌊 Meer", "value": "im Oktober Ø ca. 27 °C" },
-        { "label": "🤿 Optional", "value": "Schnorcheln" },
-        { "label": "🌅 Pflicht", "value": "Sonnenuntergang zu zweit" }
+        {
+          "label": "🏖️ Strand",
+          "value": "Yonaha Maehama"
+        },
+        {
+          "label": "🌊 Meer",
+          "value": "im Oktober Ø ca. 27 °C"
+        },
+        {
+          "label": "🤿 Optional",
+          "value": "Schnorcheln"
+        },
+        {
+          "label": "🌅 Pflicht",
+          "value": "Sonnenuntergang zu zweit"
+        }
       ],
       "daysTitle": "Der Plan",
       "daysOpen": true,
       "days": [
-        { "from": "2026-10-10", "to": "2026-10-15", "text": "Ausschlafen → Frühstück → Strand → Pool → Essen → Sonnenuntergang → Repeat. 😍" }
+        {
+          "from": "2026-10-10",
+          "to": "2026-10-15",
+          "text": "Ausschlafen → Frühstück → Strand → Pool → Essen → Sonnenuntergang → Repeat. 😍"
+        }
       ],
       "note": "Oktober ist laut offiziellem Okinawa-Guide noch warm genug für Strand, Schwimmen und Schnorcheln; Taifune sind allerdings weiterhin möglich. Deshalb flexible Buchungen bevorzugen.",
-      "hotel": { "name": "", "address": "", "addressLocal": "", "phone": "", "notes": "" },
+      "hotel": {
+        "name": "",
+        "address": "",
+        "addressLocal": "",
+        "phone": "",
+        "notes": ""
+      },
       "transport": "",
       "bookingNotes": ""
     },
@@ -206,42 +457,110 @@
       "routeIcon": "🇨🇭",
       "hideCard": true,
       "days": [
-        { "from": "2026-10-15", "to": "2026-10-16", "text": "Rückflug von Miyakojima nach Zürich (Flugzeiten noch offen)." }
+        {
+          "from": "2026-10-15",
+          "to": "2026-10-16",
+          "text": "Rückflug von Miyakojima nach Zürich (Flugzeiten noch offen)."
+        }
       ],
       "transport": "",
       "bookingNotes": ""
     }
   ],
   "checklist": [
-    { "label": "🎟️ Reservieren", "value": "Forbidden City, populäre Aussichtspunkte" },
-    { "label": "🚄 Transport", "value": "China HSR & Japan Shinkansen" },
-    { "label": "✈️ Flüge", "value": "Shanghai→HK, HK→Osaka, Tokyo→Miyako" },
-    { "label": "🏨 Hotels", "value": "zentral + Strandresort flexibel" }
+    {
+      "label": "🎟️ Reservieren",
+      "value": "Forbidden City, populäre Aussichtspunkte"
+    },
+    {
+      "label": "🚄 Transport",
+      "value": "China HSR & Japan Shinkansen"
+    },
+    {
+      "label": "✈️ Flüge",
+      "value": "Shanghai→HK, HK→Osaka, Tokyo→Miyako"
+    },
+    {
+      "label": "🏨 Hotels",
+      "value": "zentral + Strandresort flexibel"
+    }
   ],
   "phrases": [
     {
       "id": "zh",
       "title": "🇨🇳 Mandarin (Beijing, Shanghai)",
       "items": [
-        { "de": "Hallo", "local": "你好", "roman": "nǐ hǎo" },
-        { "de": "Danke", "local": "谢谢", "roman": "xièxie" },
-        { "de": "Wir haben eine Reservierung", "local": "我们有预订", "roman": "wǒmen yǒu yùdìng" },
-        { "de": "Bitte bringen Sie mich zu dieser Adresse", "local": "请带我去这个地址", "roman": "qǐng dài wǒ qù zhège dìzhǐ" },
-        { "de": "Wie viel kostet das?", "local": "多少钱？", "roman": "duōshao qián?" },
-        { "de": "Wo ist die Toilette?", "local": "洗手间在哪里？", "roman": "xǐshǒujiān zài nǎlǐ?" },
-        { "de": "Bitte nicht scharf", "local": "请不要辣", "roman": "qǐng bú yào là" },
-        { "de": "Die Rechnung, bitte", "local": "买单", "roman": "mǎidān" },
-        { "de": "Bitte helfen Sie mir", "local": "请帮帮我", "roman": "qǐng bāngbang wǒ" },
-        { "de": "Ich brauche einen Arzt", "local": "我需要看医生", "roman": "wǒ xūyào kàn yīshēng" }
+        {
+          "de": "Hallo",
+          "local": "你好",
+          "roman": "nǐ hǎo"
+        },
+        {
+          "de": "Danke",
+          "local": "谢谢",
+          "roman": "xièxie"
+        },
+        {
+          "de": "Wir haben eine Reservierung",
+          "local": "我们有预订",
+          "roman": "wǒmen yǒu yùdìng"
+        },
+        {
+          "de": "Bitte bringen Sie mich zu dieser Adresse",
+          "local": "请带我去这个地址",
+          "roman": "qǐng dài wǒ qù zhège dìzhǐ"
+        },
+        {
+          "de": "Wie viel kostet das?",
+          "local": "多少钱？",
+          "roman": "duōshao qián?"
+        },
+        {
+          "de": "Wo ist die Toilette?",
+          "local": "洗手间在哪里？",
+          "roman": "xǐshǒujiān zài nǎlǐ?"
+        },
+        {
+          "de": "Bitte nicht scharf",
+          "local": "请不要辣",
+          "roman": "qǐng bú yào là"
+        },
+        {
+          "de": "Die Rechnung, bitte",
+          "local": "买单",
+          "roman": "mǎidān"
+        },
+        {
+          "de": "Bitte helfen Sie mir",
+          "local": "请帮帮我",
+          "roman": "qǐng bāngbang wǒ"
+        },
+        {
+          "de": "Ich brauche einen Arzt",
+          "local": "我需要看医生",
+          "roman": "wǒ xūyào kàn yīshēng"
+        }
       ]
     },
     {
       "id": "yue",
       "title": "🇭🇰 Kantonesisch (Hongkong)",
       "items": [
-        { "de": "Danke / Entschuldigung (Service)", "local": "唔該", "roman": "m̀h gōi" },
-        { "de": "Danke (für ein Geschenk)", "local": "多謝", "roman": "dō jeh" },
-        { "de": "Die Rechnung, bitte", "local": "埋單", "roman": "màaih dāan" }
+        {
+          "de": "Danke / Entschuldigung (Service)",
+          "local": "唔該",
+          "roman": "m̀h gōi"
+        },
+        {
+          "de": "Danke (für ein Geschenk)",
+          "local": "多謝",
+          "roman": "dō jeh"
+        },
+        {
+          "de": "Die Rechnung, bitte",
+          "local": "埋單",
+          "roman": "màaih dāan"
+        }
       ],
       "note": "In Hongkong kommt ihr mit Englisch meist gut durch."
     },
@@ -249,15 +568,51 @@
       "id": "ja",
       "title": "🇯🇵 Japanisch",
       "items": [
-        { "de": "Hallo", "local": "こんにちは", "roman": "konnichiwa" },
-        { "de": "Vielen Dank", "local": "ありがとうございます", "roman": "arigatō gozaimasu" },
-        { "de": "Entschuldigung", "local": "すみません", "roman": "sumimasen" },
-        { "de": "Wir haben reserviert", "local": "予約しています", "roman": "yoyaku shite imasu" },
-        { "de": "Zu dieser Adresse, bitte", "local": "この住所までお願いします", "roman": "kono jūsho made onegai shimasu" },
-        { "de": "Gibt es eine englische Speisekarte?", "local": "英語のメニューはありますか？", "roman": "eigo no menyū wa arimasu ka?" },
-        { "de": "Wo ist die Toilette?", "local": "トイレはどこですか？", "roman": "toire wa doko desu ka?" },
-        { "de": "Die Rechnung, bitte", "local": "お会計お願いします", "roman": "okaikei onegai shimasu" },
-        { "de": "Bitte helfen Sie mir", "local": "助けてください", "roman": "tasukete kudasai" }
+        {
+          "de": "Hallo",
+          "local": "こんにちは",
+          "roman": "konnichiwa"
+        },
+        {
+          "de": "Vielen Dank",
+          "local": "ありがとうございます",
+          "roman": "arigatō gozaimasu"
+        },
+        {
+          "de": "Entschuldigung",
+          "local": "すみません",
+          "roman": "sumimasen"
+        },
+        {
+          "de": "Wir haben reserviert",
+          "local": "予約しています",
+          "roman": "yoyaku shite imasu"
+        },
+        {
+          "de": "Zu dieser Adresse, bitte",
+          "local": "この住所までお願いします",
+          "roman": "kono jūsho made onegai shimasu"
+        },
+        {
+          "de": "Gibt es eine englische Speisekarte?",
+          "local": "英語のメニューはありますか？",
+          "roman": "eigo no menyū wa arimasu ka?"
+        },
+        {
+          "de": "Wo ist die Toilette?",
+          "local": "トイレはどこですか？",
+          "roman": "toire wa doko desu ka?"
+        },
+        {
+          "de": "Die Rechnung, bitte",
+          "local": "お会計お願いします",
+          "roman": "okaikei onegai shimasu"
+        },
+        {
+          "de": "Bitte helfen Sie mir",
+          "local": "助けてください",
+          "roman": "tasukete kudasai"
+        }
       ]
     }
   ],
@@ -266,27 +621,76 @@
       "country": "CN",
       "title": "🇨🇳 China",
       "numbers": [
-        { "label": "Polizei", "number": "110" },
-        { "label": "Feuerwehr", "number": "119" },
-        { "label": "Ambulanz", "number": "120" }
+        {
+          "label": "Polizei",
+          "number": "110"
+        },
+        {
+          "label": "Feuerwehr",
+          "number": "119"
+        },
+        {
+          "label": "Ambulanz",
+          "number": "120"
+        }
       ]
     },
     {
       "country": "HK",
       "title": "🇭🇰 Hongkong",
       "numbers": [
-        { "label": "Polizei, Feuerwehr, Ambulanz", "number": "999" }
+        {
+          "label": "Polizei, Feuerwehr, Ambulanz",
+          "number": "999"
+        }
       ]
     },
     {
       "country": "JP",
       "title": "🇯🇵 Japan",
       "numbers": [
-        { "label": "Polizei", "number": "110" },
-        { "label": "Feuerwehr & Ambulanz", "number": "119" }
+        {
+          "label": "Polizei",
+          "number": "110"
+        },
+        {
+          "label": "Feuerwehr & Ambulanz",
+          "number": "119"
+        }
       ]
     }
   ],
   "emergencyNote": "Vor Abreise ergänzen/prüfen: Botschaft bzw. Konsulat eures Passlandes, Notfallnummer der Reiseversicherung, Kreditkarten-Sperrnummer.",
-  "sources": "Planungsbasis: offizielle Tourismusinformationen von Beijing, Japan National Tourism Organization und Visit Okinawa sowie Hong Kong Tourism Board. Öffnungszeiten, Eintritt und Flug-/Zugzeiten vor dem jeweiligen Tag erneut prüfen. Stand: September 2026."
+  "sources": "Planungsbasis: offizielle Tourismusinformationen von Beijing, Japan National Tourism Organization und Visit Okinawa sowie Hong Kong Tourism Board. Öffnungszeiten, Eintritt und Flug-/Zugzeiten vor dem jeweiligen Tag erneut prüfen. Stand: September 2026.",
+  "currency": {
+    "base": "CHF",
+    "updated": "2026-09-17",
+    "note": "Richtwerte – offline gespeichert. Wechselstuben, Karten und Automaten rechnen mit Aufschlag.",
+    "rates": [
+      {
+        "code": "EUR",
+        "label": "Euro · Italien",
+        "flag": "🇮🇹",
+        "perBase": 1.0569
+      },
+      {
+        "code": "CNY",
+        "label": "Renminbi/Yuan · China",
+        "flag": "🇨🇳",
+        "perBase": 8.1659
+      },
+      {
+        "code": "HKD",
+        "label": "Hongkong-Dollar",
+        "flag": "🇭🇰",
+        "perBase": 9.5461
+      },
+      {
+        "code": "JPY",
+        "label": "Yen · Japan",
+        "flag": "🇯🇵",
+        "perBase": 189.3
+      }
+    ]
+  }
 }

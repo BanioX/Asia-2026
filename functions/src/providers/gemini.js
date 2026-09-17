@@ -5,7 +5,8 @@ import { ProviderError } from './errors.js';
 
 // Allowlist from https://ai.google.dev/gemini-api/docs/available-regions (checked 2026-09-17).
 // Only the countries on this trip are listed; mainland China (CN) and Hong Kong (HK) are NOT supported.
-const SUPPORTED_COUNTRIES = ['CH', 'JP'];
+// Italy re-checked 2026-09-17 (Rome leg added): listed as available.
+const SUPPORTED_COUNTRIES = ['CH', 'IT', 'JP'];
 
 export function createGeminiProvider({ apiKey, model, client }) {
   const ai = client ?? (apiKey ? new GoogleGenAI({ apiKey }) : null);

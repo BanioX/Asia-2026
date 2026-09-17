@@ -12,7 +12,7 @@ export const AI_LOGIN_TIMEOUT_MS = 10000;
 export const AI_HISTORY_MESSAGES = 10; // previous chat turns sent along with a question
 
 // UX hint only (the backend decides): where the configured AI provider is officially available.
-export const AI_SUPPORTED_COUNTRIES = ['CH', 'JP'];
+export const AI_SUPPORTED_COUNTRIES = ['CH', 'IT', 'JP'];
 
 /** Current time; on localhost `?now=2026-10-07T03:00:00Z` simulates a trip day for testing. */
 export function appNow() {

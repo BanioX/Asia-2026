@@ -155,6 +155,48 @@ function renderEmergency(trip) {
     trip.emergencyNote ? h('p', { class: 'muted' }, trip.emergencyNote) : null);
 }
 
+function money(n, code) {
+  const d = code === 'JPY' ? 0 : 2;
+  return new Intl.NumberFormat('de-CH', { minimumFractionDigits: d, maximumFractionDigits: d }).format(n);
+}
+
+/** Offline converter: every rate is stored as "units per 1 CHF", so we go through CHF. */
+function renderCurrency(trip) {
+  const root = clear($('currency'));
+  const cur = trip.currency;
+  if (!cur) return;
+  const all = [{ code: cur.base, label: 'Schweizer Franken', flag: '🇨🇭', perBase: 1 }, ...cur.rates];
+
+  const amount = h('input', { class: 'cur-input', type: 'number', inputmode: 'decimal', min: '0', step: 'any', value: '10', 'aria-label': 'Betrag' });
+  const from = h('select', { class: 'cur-select', 'aria-label': 'Währung' }, all.map((c) => h('option', { value: c.code }, `${c.flag} ${c.code}`)));
+  try { from.value = localStorage.getItem('asiaCurrency') || cur.base; } catch { from.value = cur.base; }
+  if (!all.some((c) => c.code === from.value)) from.value = cur.base;
+  const out = h('div', { class: 'grid cur-out' });
+
+  function update() {
+    clear(out);
+    try { localStorage.setItem('asiaCurrency', from.value); } catch { /* private mode */ }
+    const n = Number(String(amount.value).replace(',', '.'));
+    const src = all.find((c) => c.code === from.value) || all[0];
+    if (!Number.isFinite(n) || n < 0) return;
+    const inBase = n / src.perBase;
+    for (const c of all) {
+      if (c.code === src.code) continue;
+      out.append(h('div', { class: 'mini' }, h('strong', {}, `${c.flag} ${money(inBase * c.perBase, c.code)} ${c.code}`), h('span', {}, c.label)));
+    }
+  }
+  amount.addEventListener('input', update);
+  from.addEventListener('change', update);
+
+  root.append(
+    h('h3', { class: 'group-title' }, '💱 Währungsrechner'),
+    h('div', { class: 'cur-row' }, amount, from),
+    out,
+    h('p', { class: 'muted' }, `Kurse vom ${formatLongDate(cur.updated)}. ${cur.note || ''}`),
+  );
+  update();
+}
+
 async function loadTrip() {
   const res = await fetch('./trip-data.json');
   if (!res.ok) throw new Error(`trip-data.json: HTTP ${res.status}`);
@@ -176,6 +218,7 @@ async function main() {
   renderCities(trip, favs);
   renderFavorites(trip, favs);
   renderStays(trip);
+  renderCurrency(trip);
   renderPhrases(trip);
   renderEmergency(trip);
   const checklist = clear($('checklist'));
