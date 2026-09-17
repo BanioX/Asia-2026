@@ -5,6 +5,7 @@ import { createHandler } from '../src/app.js';
 import { config } from '../src/config.js';
 import { issueToken, verifyToken, secretEquals } from '../src/token.js';
 import { validateAiRequest } from '../src/validate.js';
+import { createDiary } from '../src/diary.js';
 import { MemoryRateLimiter } from '../src/ratelimit.js';
 import { createGeminiProvider, mapError } from '../src/providers/gemini.js';
 import { runWithFallback } from '../src/providers/index.js';
@@ -26,6 +27,45 @@ const KYOTO_DAY = at('2026-10-07T03:00:00Z'); // 12:00 in Kyoto
 const BEIJING_DAY = at('2026-09-27T04:00:00Z');
 const silentLog = { info() {}, warn() {}, error() {} };
 
+/** Enough Firestore for the diary: doc get/set(merge) and a single where(). */
+function fakeDb() {
+  const docs = new Map();
+  return {
+    docs,
+    collection: (name) => ({
+      doc: (id) => {
+        const key = name + '/' + id;
+        return {
+          async get() { const d = docs.get(key); return { exists: Boolean(d), data: () => d && { ...d } }; },
+          async set(value, opts) { docs.set(key, opts?.merge ? { ...(docs.get(key) || {}), ...value } : { ...value }); },
+        };
+      },
+      where: (field, _op, val) => ({
+        async get() {
+          const hits = [...docs.entries()]
+            .filter(([k, d]) => k.startsWith(name + '/') && d[field] === val)
+            .map(([, d]) => ({ data: () => ({ ...d }) }));
+          return { docs: hits };
+        },
+      }),
+    }),
+  };
+}
+
+/** Enough Cloud Storage for the diary. */
+function fakeBucket() {
+  const files = new Map();
+  return {
+    files,
+    file: (path) => ({
+      async save(buf, opts) { files.set(path, { buf, contentType: opts?.contentType }); },
+      async exists() { return [files.has(path)]; },
+      async download() { return [files.get(path).buf]; },
+      async delete() { if (!files.delete(path)) throw new Error('no such file'); },
+    }),
+  };
+}
+
 function fakeProvider(impl, supportedCountries = ['CH', 'IT', 'JP']) {
   const calls = [];
   return {
@@ -41,7 +81,11 @@ function fakeProvider(impl, supportedCountries = ['CH', 'IT', 'JP']) {
 
 function setup({ now = KYOTO_DAY, provider = fakeProvider(() => ({ text: 'Antwort', usage: null })), secrets = SECRETS } = {}) {
   let clock = now;
+  const db = fakeDb();
+  const bucket = fakeBucket();
+  const diary = createDiary({ db, bucket, limits: config.limits, now: () => clock });
   const handler = createHandler({
+    diary,
     config,
     getSecrets: () => secrets,
     providers: [provider],
@@ -72,7 +116,7 @@ function setup({ now = KYOTO_DAY, provider = fakeProvider(() => ({ text: 'Antwor
   const login = (user = 'deshira', code = SECRETS.COUPLE_ACCESS_SECRET) => call({ path: '/session', body: { user, code } });
   const ask = (token, body = { messages: [{ role: 'user', text: 'Was machen wir heute?' }] }) =>
     call({ path: '/ai', body, headers: { authorization: `Bearer ${token}` } });
-  return { call, login, ask, provider, setClock: (t) => { clock = t; } };
+  return { call, login, ask, provider, diary, db, bucket, setClock: (t) => { clock = t; } };
 }
 
 describe('login', () => {
@@ -403,6 +447,95 @@ describe('provider layer', () => {
     assert.equal(mapError(e('APIError', 400, 'User location is not supported for the API use.')).kind, 'unavailable');
     assert.equal(mapError(e('APIError', 503)).kind, 'unavailable');
     assert.equal(mapError(e('APIError', 400, 'bad')).kind, 'rejected');
+  });
+});
+
+describe('diary', () => {
+  const day = { date: '2026-09-22', text: 'Erster Tag in Rom.', mood: 'gluecklich', expenses: [{ label: 'Gelato', amount: 4.5, currency: 'EUR' }] };
+  const photo = (extra = {}) => ({ date: '2026-09-22', image: { mimeType: 'image/jpeg', data: 'AAECAwQFBgcICQoL' }, ...extra });
+  const auth = (token) => ({ authorization: 'Bearer ' + token });
+  const tokenFor = async (s, user) => (await s.login(user)).body.token;
+
+  test('a day is saved and comes back in the list', async () => {
+    const s = setup();
+    const token = await tokenFor(s, 'alban');
+    const saved = await s.call({ path: '/diary/save', body: day, headers: auth(token) });
+    assert.equal(saved.statusCode, 200);
+    assert.equal(saved.body.day.text, day.text);
+    assert.equal(saved.body.day.mood, 'gluecklich');
+    assert.deepEqual(saved.body.day.expenses, day.expenses);
+
+    const list = await s.call({ path: '/diary/list', body: {}, headers: auth(token) });
+    assert.equal(list.body.days.length, 1);
+    assert.equal(list.body.days[0].date, '2026-09-22');
+    assert.equal(list.body.days[0].user, undefined, 'the owner is never echoed back');
+  });
+
+  test('each diary only ever shows its own days', async () => {
+    const s = setup();
+    const alban = await tokenFor(s, 'alban');
+    const deshira = await tokenFor(s, 'deshira');
+    await s.call({ path: '/diary/save', body: day, headers: auth(alban) });
+    await s.call({ path: '/diary/save', body: { ...day, text: 'Ihr Eintrag.' }, headers: auth(deshira) });
+
+    const hers = await s.call({ path: '/diary/list', body: {}, headers: auth(deshira) });
+    assert.equal(hers.body.days.length, 1);
+    assert.equal(hers.body.days[0].text, 'Ihr Eintrag.');
+  });
+
+  test('photos: add, read back, remove', async () => {
+    const s = setup();
+    const token = await tokenFor(s, 'alban');
+    const added = await s.call({ path: '/diary/photo/add', body: photo({ caption: 'Kolosseum' }), headers: auth(token) });
+    assert.equal(added.statusCode, 200);
+    const { id } = added.body.photo;
+    assert.equal(added.body.photo.caption, 'Kolosseum');
+    assert.equal(s.bucket.files.size, 1);
+
+    const got = await s.call({ path: '/diary/photo/get', body: { date: '2026-09-22', id }, headers: auth(token) });
+    assert.equal(got.body.photo.data, 'AAECAwQFBgcICQoL');
+
+    const gone = await s.call({ path: '/diary/photo/remove', body: { date: '2026-09-22', id }, headers: auth(token) });
+    assert.equal(gone.statusCode, 200);
+    assert.equal(s.bucket.files.size, 0);
+    assert.equal((await s.call({ path: '/diary/photo/get', body: { date: '2026-09-22', id }, headers: auth(token) })).statusCode, 404);
+  });
+
+  test('a photo from the other diary is not readable', async () => {
+    const s = setup();
+    const alban = await tokenFor(s, 'alban');
+    const deshira = await tokenFor(s, 'deshira');
+    const { id } = (await s.call({ path: '/diary/photo/add', body: photo(), headers: auth(alban) })).body.photo;
+    assert.equal((await s.call({ path: '/diary/photo/get', body: { date: '2026-09-22', id }, headers: auth(deshira) })).statusCode, 404);
+  });
+
+  test('without a session nothing works', async () => {
+    const s = setup();
+    for (const path of ['/diary/list', '/diary/save', '/diary/photo/add', '/diary/photo/get', '/diary/photo/remove']) {
+      assert.equal((await s.call({ path, body: {} })).statusCode, 401, path);
+    }
+  });
+
+  test('bad input is rejected', async () => {
+    const s = setup();
+    const token = await tokenFor(s, 'alban');
+    const send = (path, body) => s.call({ path, body, headers: auth(token) });
+    assert.equal((await send('/diary/save', { date: '22.09.2026' })).statusCode, 400);
+    assert.equal((await send('/diary/save', { date: '2026-09-22', text: 'x'.repeat(config.limits.maxDiaryTextChars + 1) })).statusCode, 413);
+    assert.equal((await send('/diary/save', { date: '2026-09-22', expenses: [{ label: 'x', amount: 'viel' }] })).statusCode, 400);
+    assert.equal((await send('/diary/photo/add', { date: '2026-09-22', image: { mimeType: 'image/gif', data: 'AAEC' } })).statusCode, 400);
+    assert.equal((await send('/diary/photo/get', { date: '2026-09-22', id: '../../etc/passwd' })).statusCode, 400);
+  });
+
+  test('the per-day photo limit holds', async () => {
+    const s = setup();
+    const token = await tokenFor(s, 'alban');
+    for (let i = 0; i < config.limits.maxDiaryPhotosPerDay; i += 1) {
+      assert.equal((await s.call({ path: '/diary/photo/add', body: photo(), headers: auth(token) })).statusCode, 200);
+    }
+    const tooMany = await s.call({ path: '/diary/photo/add', body: photo(), headers: auth(token) });
+    assert.equal(tooMany.statusCode, 409);
+    assert.equal(tooMany.body.error.code, 'too_many_photos');
   });
 });
 

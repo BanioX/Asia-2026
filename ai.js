@@ -53,15 +53,25 @@ function loadSession() {
     return s && s.token && s.expiresAt > Date.now() ? s : null;
   } catch { return null; }
 }
+export function openAiPanel() {
+  document.getElementById('aiOpen')?.click();
+}
+
+function announce() {
+  window.dispatchEvent(new CustomEvent('asia:session'));
+}
+
 function saveSession(s) {
   memorySession = s;
   try { localStorage.setItem(SESSION_KEY, JSON.stringify(s)); } catch { /* private mode: session lasts until reload */ }
+  announce();
 }
 function dropSession() {
   memorySession = null;
   try { localStorage.removeItem(SESSION_KEY); } catch { /* ignore */ }
+  announce();
 }
-function currentSession() {
+export function currentSession() {
   return loadSession() || (memorySession && memorySession.expiresAt > Date.now() ? memorySession : null);
 }
 
@@ -101,7 +111,7 @@ const store = (() => {
 })();
 
 // ---------- API ----------
-async function post(path, body, { token, timeoutMs }) {
+export async function apiPost(path, body, { token, timeoutMs }) {
   const ctrl = new AbortController();
   const timer = setTimeout(() => ctrl.abort(), timeoutMs);
   try {
@@ -211,7 +221,7 @@ export function initAi(trip) {
       btn.disabled = true;
       btn.textContent = 'Prüfe …';
       err.textContent = '';
-      const r = await post('/session', { user: selected, code: code.value }, { timeoutMs: AI_LOGIN_TIMEOUT_MS });
+      const r = await apiPost('/session', { user: selected, code: code.value }, { timeoutMs: AI_LOGIN_TIMEOUT_MS });
       busy = false;
       btn.disabled = false;
       btn.textContent = 'Entsperren';
@@ -374,7 +384,7 @@ export function initAi(trip) {
     const image = retryImages.get(messageId);
     const payload = { messages: [...history, { role: 'user', text: msg.text }], action };
     if (image) payload.image = { mimeType: image.mimeType, data: image.data };
-    const r = await post('/ai', payload, { token: session.token, timeoutMs: AI_CLIENT_TIMEOUT_MS });
+    const r = await apiPost('/ai', payload, { token: session.token, timeoutMs: AI_CLIENT_TIMEOUT_MS });
     setBusy(false);
 
     if (r.status === 200 && typeof r.data?.reply === 'string') {

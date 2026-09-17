@@ -1,15 +1,17 @@
 // Firebase Cloud Functions (2nd gen) entry point.
-// Public URL: https://europe-west6-asia-2026-tagebuch.cloudfunctions.net/api/{session|ai}
+// Public URL: https://europe-west6-asia-2026-tagebuch.cloudfunctions.net/api/{session|ai|diary/*}
 import { onRequest } from 'firebase-functions/v2/https';
 import { defineSecret } from 'firebase-functions/params';
 import { initializeApp } from 'firebase-admin/app';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getStorage } from 'firebase-admin/storage';
 import bundledTripData from './shared/trip-data.json' with { type: 'json' };
 import { config } from './src/config.js';
 import { createHandler } from './src/app.js';
 import { createProviders } from './src/providers/index.js';
 import { FirestoreRateLimiter } from './src/ratelimit.js';
 import { createTripDataLoader } from './src/tripData.js';
+import { createDiary } from './src/diary.js';
 
 // Values live in Google Cloud Secret Manager (set by Alban via the Firebase CLI).
 const GEMINI_API_KEY = defineSecret('GEMINI_API_KEY');
@@ -34,6 +36,7 @@ function getHandler() {
     providers: createProviders({ config, secrets: getSecrets() }),
     limiter: new FirestoreRateLimiter(getFirestore()),
     loadTripData: createTripDataLoader({ url: config.tripDataUrl, bundled: bundledTripData }),
+    diary: createDiary({ db: getFirestore(), bucket: getStorage().bucket(), limits: config.limits }),
   });
   return handler;
 }

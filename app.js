@@ -4,6 +4,7 @@ import { getTripStatus, formatRange, formatDayLabel, formatLongDate, daysBetween
 import { appNow } from './app-config.js';
 import { h, inline, clear } from './dom.js';
 import { initAi } from './ai.js';
+import { initDiary } from './diary.js';
 
 const FAV_KEY = 'asiaFavorites';
 const $ = (id) => document.getElementById(id);
@@ -219,6 +220,7 @@ async function main() {
   renderFavorites(trip, favs);
   renderStays(trip);
   renderCurrency(trip);
+  initDiary(trip);
   renderPhrases(trip);
   renderEmergency(trip);
   const checklist = clear($('checklist'));

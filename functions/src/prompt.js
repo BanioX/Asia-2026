@@ -9,6 +9,7 @@ const ACTION_HINTS = {
   rain: 'Fokus: gute Indoor-Alternativen bei Regen an der aktuellen Station.',
   food: 'Fokus: typische Gerichte und Food-Tipps für die aktuelle Station.',
   translate: 'Fokus: Übersetzung in die Landessprache der aktuellen Station.',
+  diary: 'Fokus: ein Tagebucheintrag in der Ich-Form aus Sicht der Person, die fragt. Warm und konkret, keine Aufzählung, keine Überschrift, nichts erfinden was nicht in den Angaben steht.',
 };
 
 function emergencyLine(trip) {

@@ -1,10 +1,17 @@
 // HTTP handler for the private AI concierge.
 //   POST /session  { user, code }            -> { token, user, expiresAt }
-//   POST /ai       { messages, action? }     -> { reply, token?, expiresAt? }   (Authorization: Bearer <token>)
+//   POST /ai       { messages, action?, image? } -> { reply, token?, expiresAt? }
+//   POST /diary/list          {}                        -> { days }
+//   POST /diary/save          { date, text, mood, expenses } -> { day }
+//   POST /diary/photo/add     { date, image, caption? }  -> { photo }
+//   POST /diary/photo/get     { date, id }               -> { photo }
+//   POST /diary/photo/remove  { date, id }               -> { ok }
+// Everything except /session needs Authorization: Bearer <token>.
 // Errors: { error: { code, message, retryAfterSeconds?, availableFrom? } }
 import { createHash } from 'node:crypto';
 import { issueToken, verifyToken, secretEquals } from './token.js';
-import { validateLogin, validateAiRequest } from './validate.js';
+import { validateLogin, validateAiRequest, validateDiaryDay, validateDiaryPhoto, validateDiaryPhotoRef } from './validate.js';
+import { DiaryError } from './diary.js';
 import { buildSystemPrompt } from './prompt.js';
 import { providersForCountries, runWithFallback } from './providers/index.js';
 import { ProviderError } from './providers/errors.js';
@@ -25,7 +32,7 @@ class HttpError extends Error {
 const tooMany = (retryAfterSeconds, message = 'Zu viele Anfragen – bitte kurz warten.') =>
   new HttpError(429, 'rate_limited', message, { retryAfterSeconds });
 
-export function createHandler({ config, getSecrets, providers, limiter, loadTripData, now = () => Date.now(), log = console }) {
+export function createHandler({ config, getSecrets, providers, limiter, loadTripData, diary, now = () => Date.now(), log = console }) {
   const sessionOpts = () => ({ now: now(), users: config.users, maxAgeSeconds: config.session.maxAgeSeconds });
 
   function secrets() {
@@ -71,12 +78,18 @@ export function createHandler({ config, getSecrets, providers, limiter, loadTrip
     return { status: 200, body: { token, user: v.value.user, expiresAt } };
   }
 
+  /** Every endpoint but /session goes through here; the token decides who is acting. */
+  function requireSession(req) {
+    const auth = String(req.headers.authorization || '');
+    const session = auth.startsWith('Bearer ') ? verifyToken(auth.slice(7), secrets().SESSION_SIGNING_SECRET, sessionOpts()) : null;
+    if (!session) throw new HttpError(401, 'unauthorized', 'Bitte erneut entsperren.');
+    return session;
+  }
+
   async function handleAi(req) {
     // 1. session
     const s = secrets();
-    const auth = String(req.headers.authorization || '');
-    const session = auth.startsWith('Bearer ') ? verifyToken(auth.slice(7), s.SESSION_SIGNING_SECRET, sessionOpts()) : null;
-    if (!session) throw new HttpError(401, 'unauthorized', 'Bitte erneut entsperren.');
+    const session = requireSession(req);
 
     // 2. payload + prompt length
     const v = validateAiRequest(req.body, config.limits);
@@ -130,7 +143,73 @@ export function createHandler({ config, getSecrets, providers, limiter, loadTrip
     return { status: 200, body };
   }
 
-  const routes = { '/session': handleSession, '/ai': handleAi };
+  // ---------- diary ----------
+  // The diary of the logged-in user, always. A request cannot name a different one.
+  async function diaryWrite(req) {
+    const session = requireSession(req);
+    await enforce(`diary_${session.u}_day`, config.rateLimits.diaryPerUserDay, 'Tageslimit für Tagebuch-Änderungen erreicht.');
+    return session;
+  }
+
+  const badRequest = (v) => new HttpError(
+    v.code === 'entry_too_long' || v.code === 'image_too_large' ? 413 : 400,
+    v.code,
+    v.message,
+  );
+
+  async function handleDiaryList(req) {
+    const session = requireSession(req);
+    return { status: 200, body: { days: await diary.list(session.u) } };
+  }
+
+  async function handleDiarySave(req) {
+    const session = await diaryWrite(req);
+    const v = validateDiaryDay(req.body, config.limits);
+    if (!v.ok) throw badRequest(v);
+    log.info('diary saved', { user: session.u, date: v.value.date });
+    return { status: 200, body: { day: await diary.save(session.u, v.value) } };
+  }
+
+  async function handleDiaryPhotoAdd(req) {
+    const session = await diaryWrite(req);
+    const v = validateDiaryPhoto(req.body, config.limits);
+    if (!v.ok) throw badRequest(v);
+    try {
+      const photo = await diary.addPhoto(session.u, v.value);
+      log.info('diary photo added', { user: session.u, date: v.value.date });
+      return { status: 200, body: { photo } };
+    } catch (err) {
+      if (err instanceof DiaryError) throw new HttpError(409, err.code, err.message);
+      throw err;
+    }
+  }
+
+  async function handleDiaryPhotoGet(req) {
+    const session = requireSession(req);
+    const v = validateDiaryPhotoRef(req.body);
+    if (!v.ok) throw badRequest(v);
+    const photo = await diary.getPhoto(session.u, v.value);
+    if (!photo) throw new HttpError(404, 'not_found', 'Foto nicht gefunden.');
+    return { status: 200, body: { photo } };
+  }
+
+  async function handleDiaryPhotoRemove(req) {
+    const session = await diaryWrite(req);
+    const v = validateDiaryPhotoRef(req.body);
+    if (!v.ok) throw badRequest(v);
+    if (!await diary.removePhoto(session.u, v.value)) throw new HttpError(404, 'not_found', 'Foto nicht gefunden.');
+    return { status: 200, body: { ok: true } };
+  }
+
+  const routes = {
+    '/session': handleSession,
+    '/ai': handleAi,
+    '/diary/list': handleDiaryList,
+    '/diary/save': handleDiarySave,
+    '/diary/photo/add': handleDiaryPhotoAdd,
+    '/diary/photo/get': handleDiaryPhotoGet,
+    '/diary/photo/remove': handleDiaryPhotoRemove,
+  };
 
   return async function handler(req, res) {
     res.set('Cache-Control', 'no-store');

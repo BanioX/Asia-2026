@@ -34,6 +34,9 @@ export const config = {
     maxTotalChars: 20000,
     maxImageBase64Chars: 1_400_000, // ~1 MB JPEG; the app downscales before sending
     imageMimeTypes: ['image/jpeg', 'image/png', 'image/webp'],
+    maxDiaryTextChars: 4000,
+    maxDiaryExpenses: 25,
+    maxDiaryPhotosPerDay: 20,
     maxOutputTokens: 1024,
     providerTimeoutMs: 12000,
   },
@@ -42,6 +45,7 @@ export const config = {
     aiPerUserBurst: { limit: 15, windowSeconds: 10 * 60 },
     aiPerUserDay: { limit: 120, windowSeconds: 24 * 3600 },
     aiGlobalDay: { limit: 250, windowSeconds: 24 * 3600 },
+    diaryPerUserDay: { limit: 400, windowSeconds: 24 * 3600 },
     loginPerIp: { limit: 8, windowSeconds: 15 * 60 },
     loginFailuresGlobal: { limit: 40, windowSeconds: 3600 },
   },
